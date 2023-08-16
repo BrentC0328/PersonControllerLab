@@ -48,18 +48,19 @@ public class PersonController {
     @PutMapping("/people/{id}")
     public ResponseEntity<Person> updatePerson(@RequestBody Person p, @PathVariable Long id){
         Optional<Person> personToFind = personRepository.findById(id);
-        Person updateThisOne;
+
 
         if(personToFind.isPresent()){
-            updateThisOne = personToFind.get();
+            Person updateThisOne = personToFind.get();
             updateThisOne.setFirstName(p.getFirstName());
             updateThisOne.setLastName(p.getLastName());
             personRepository.save(updateThisOne);
+            return ResponseEntity.status(HttpStatus.OK).body(updateThisOne);
+
         } else {
             return createPerson(p);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(updateThisOne);
-    };
+    }
 
     @DeleteMapping("/people/{id}")
     ResponseEntity<Person> deletePerson(Long id){
